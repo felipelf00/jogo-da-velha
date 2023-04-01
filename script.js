@@ -12,7 +12,35 @@ const tabuleiro = (() => {
 
   const mostrarTabuleiro = () => {
     console.log(tabuleiro.grid);
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        const celula = document.getElementById(`${i}${j}`);
+        switch (grid[i][j]) {
+          case "1":
+            celula.textContent = "X";
+            break;
+          case "2":
+            celula.textContent = "O";
+            break;
+          default:
+            celula.textContent = "";
+            break;
+        }
+      }
+    }
   };
+
+  const atribuirCelulas = (() => {
+    for (var i = 0; i < 3; i++) {
+      for (var j = 0; j < 3; j++) {
+        const celula = document.getElementById(`${i}${j}`);
+        // celula.addEventListener("click", () => meuJogo.jogar(i, j));
+        const linha = i;
+        const coluna = j;
+        celula.onclick = () => meuJogo.jogar(linha, coluna);
+      }
+    }
+  })();
 
   return { grid, limpar, mostrarTabuleiro };
 })();

@@ -8,6 +8,7 @@ const tabuleiro = (() => {
         grid[i].push("-");
       }
     }
+    mostrarTabuleiro();
   };
 
   const mostrarTabuleiro = () => {
@@ -34,7 +35,6 @@ const tabuleiro = (() => {
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
         const celula = document.getElementById(`${i}${j}`);
-        // celula.addEventListener("click", () => meuJogo.jogar(i, j));
         const linha = i;
         const coluna = j;
         celula.onclick = () => meuJogo.jogar(linha, coluna);
@@ -59,16 +59,25 @@ const jogo = (nome1, nome2) => {
     },
   ];
 
-  let jogadorAtivo = jogadores[0];
+  let jogadorAtivo = "";
+
+  const mostrarJogadorAtivo = () => {
+    const ativo = document.querySelector("#jogador-ativo");
+    ativo.textContent = `Agora é a vez de ${jogadorAtivo.nome}`;
+  };
 
   const sorteio = () => {
     jogadorAtivo = jogadores[Math.floor(Math.random() * 2)];
+    mostrarJogadorAtivo();
   };
+
+  sorteio();
 
   const alternarJogador = () => {
     jogadorAtivo === jogadores[0]
       ? (jogadorAtivo = jogadores[1])
       : (jogadorAtivo = jogadores[0]);
+    mostrarJogadorAtivo();
   };
 
   const jogar = (linha, coluna) => {
@@ -125,8 +134,33 @@ const jogo = (nome1, nome2) => {
     }
   };
 
+  const fim = document.getElementById("fim-de-jogo");
+  const resultado = document.getElementById("resultado");
+
   const declararVencedor = (vencedor) => {
     console.log(vencedor);
+
+    const para = document.createElement("p");
+
+    switch (vencedor) {
+      case "empate":
+        para.textContent = "Empate";
+        break;
+      default:
+        para.textContent = `Vencedor: ${vencedor}`;
+        break;
+    }
+
+    resultado.appendChild(para);
+    fim.style.display = "grid";
+  };
+
+  const botaoReplay = document.getElementById("replay");
+  botaoReplay.onclick = () => {
+    tabuleiro.limpar();
+    resultado.innerHTML = "";
+    fim.style.display = "none";
+    sorteio();
   };
 
   return { jogar, fimDeJogo };

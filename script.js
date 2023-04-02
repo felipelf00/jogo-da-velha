@@ -12,7 +12,6 @@ const tabuleiro = (() => {
   };
 
   const mostrarTabuleiro = () => {
-    console.log(tabuleiro.grid);
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
         const celula = document.getElementById(`${i}${j}`);
@@ -31,7 +30,7 @@ const tabuleiro = (() => {
     }
   };
 
-  const atribuirCelulas = (() => {
+  const atribuirCelulas = () => {
     for (var i = 0; i < 3; i++) {
       for (var j = 0; j < 3; j++) {
         const celula = document.getElementById(`${i}${j}`);
@@ -40,22 +39,34 @@ const tabuleiro = (() => {
         celula.onclick = () => meuJogo.jogar(linha, coluna);
       }
     }
-  })();
+  };
 
-  return { grid, limpar, mostrarTabuleiro };
+  return { grid, limpar, mostrarTabuleiro, atribuirCelulas };
 })();
 
 const jogo = (nome1, nome2) => {
   const jogadores = [
     {
-      nome: nome1,
+      _nome: nome1,
       marcador: "1",
       pontuacao: 0,
+      get nome() {
+        return this._nome;
+      },
+      set nome(valor) {
+        this._nome = valor;
+      },
     },
     {
-      nome: nome2,
+      _nome: nome2,
       marcador: "2",
       pontuacao: 0,
+      get nome() {
+        return this._nome;
+      },
+      set nome(valor) {
+        this._nome = valor;
+      },
     },
   ];
 
@@ -70,8 +81,6 @@ const jogo = (nome1, nome2) => {
     jogadorAtivo = jogadores[Math.floor(Math.random() * 2)];
     mostrarJogadorAtivo();
   };
-
-  sorteio();
 
   const alternarJogador = () => {
     jogadorAtivo === jogadores[0]
@@ -163,10 +172,23 @@ const jogo = (nome1, nome2) => {
     sorteio();
   };
 
-  return { jogar, fimDeJogo };
+  return { jogar, fimDeJogo, jogadores, sorteio };
 };
 
-tabuleiro.limpar();
-tabuleiro.mostrarTabuleiro();
+const btnJogar = document.querySelector("#jogar");
 
-const meuJogo = jogo("clifton", "macnamara");
+tabuleiro.limpar();
+tabuleiro.atribuirCelulas();
+
+btnJogar.addEventListener("click", (event) => {
+  event.preventDefault();
+  const jogador1 = document.querySelector("#jogador1").value;
+  const jogador2 = document.querySelector("#jogador2").value;
+  const telaInicial = document.querySelector(".inicio");
+
+  window.meuJogo = jogo(jogador1, jogador2);
+  meuJogo.sorteio();
+
+  telaInicial.style.display = "none";
+  tabuleiro.limpar();
+});

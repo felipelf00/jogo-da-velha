@@ -141,7 +141,8 @@ input {
   font-size: 1.2rem;
   margin: 12px;
   border-radius: 8px;
-  padding: 4px;
+  padding: 4px 8px;
+  background: var(--cor2);
 }
 
 button {
